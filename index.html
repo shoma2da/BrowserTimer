@@ -41,7 +41,7 @@
     <div id="buttons">
         <input id="start_button" type="button" value="カウントスタート" onclick="startTimer();">
         <input id="pause_button" type="button" value="一時停止">
-        <input id="stop_button" type="button" value="停止">
+        <input id="stop_button" type="button" value="停止" onclick="stopTimer();">
     </div>
 
     <script type="text/javascript">
@@ -78,6 +78,7 @@ function changeStartButtonDisabled() {
     startButton.removeAttribute("disabled");
 }
 
+var timerId = 0;
 function startTimer(startButton) {
     //何秒のタイマーかを算出
     var hourValue = parseInt(document.getElementById("hour_input").value);
@@ -99,7 +100,7 @@ function startTimer(startButton) {
     view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
 
     //タイマースタート
-    var timerId = setInterval(function() {
+    timerId = setInterval(function() {
         settingSecond = settingSecond - 1;
         var hourValue = parseInt(settingSecond / 60 / 60);
         var minuteValue= parseInt(settingSecond / 60) % 60;
@@ -109,17 +110,25 @@ function startTimer(startButton) {
         //タイマー終了！
         if (settingSecond === 0) {
             alert("時間です");
-            clearInterval(timerId);
-            
-            startButton.removeAttribute("disabled");
-            pauseButton.disabled = "disabled";
-            stopButton.disabled = "disabled";
-            input.style.display = "";
-            view.style.display = "none";
+            stopTimer();
         }
     }, 1000);
 }
 
+function stopTimer() {
+    clearInterval(timerId);
+
+    var startButton = document.getElementById("start_button");
+    var pauseButton = document.getElementById("pause_button");
+    var stopButton = document.getElementById("stop_button");
+    var input = document.getElementById("input");
+    var view = document.getElementById("view");
+    startButton.removeAttribute("disabled");
+    pauseButton.disabled = "disabled";
+    stopButton.disabled = "disabled";
+    input.style.display = "";
+    view.style.display = "none";
+}
     </script>
 </body>
 </html>
