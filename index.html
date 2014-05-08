@@ -1,1 +1,125 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ブラウザタイマー ~ browser timer ~</title>
+    <meta name="description" content="シンプルなブラウザタイマーとして使えるページです。いつも使っているブラウザだけあればほかのタイマーアプリをわざわざ開く必要はありません。">
+    <style>
+        body {
+            text-align: center;
+        }
+        #input {
+            margin: 15px;
+        }
+        #input * {
+            font-size: 250%;
+        }
+        #buttons input {
+            font-size: 250%;
+            margin: 15px;
+        }
+        #view {
+            font-size: 400%;
+            margin: 15px;
+        }
+        .buttons input {
+            font-size: 1.4em;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <h1>ブラウザタイマー ~ browser timer ~</h1>
+    <hr>
+    <div id="input">
+        <input id="hour_input" type="number" max="99" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">時間
+        <input id="minute_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">分
+        <input id="second_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">秒
+    </div>
+    <div id="view">00:00:00</div>
+    <div id="buttons">
+        <input id="start_button" type="button" value="カウントスタート" onclick="startTimer();">
+        <input id="pause_button" type="button" value="一時停止">
+        <input id="stop_button" type="button" value="停止">
+    </div>
+
+    <script type="text/javascript">
+//初期表示設定
+document.getElementById("view").style.display = "none";
+document.getElementById("start_button").disabled = "disabled";
+document.getElementById("pause_button").disabled = "disabled";
+document.getElementById("stop_button").disabled = "disabled";
+
+//範囲内の数字にする
+function tidyNumber(inputEntry, value, max) {
+    if (value === '') {
+        inputEntry.value = "00";
+        return;
+    }
+
+    if (parseInt(max) < parseInt(value)) {
+        inputEntry.value = max;
+        return;
+    }
+}
+
+//カウントスタートできるかどうかを設定
+function changeStartButtonDisabled() {
+    var startButton = document.getElementById("start_button");
+
+    var hourValue = parseInt(document.getElementById("hour_input").value);
+    var minuteValue= parseInt(document.getElementById("minute_input").value);
+    var secondVaule = parseInt(document.getElementById("second_input").value);
+    if (hourValue === 0 && minuteValue === 0 && secondVaule === 0) {
+        startButton.disabled = "disabled";
+        return;
+    }
+    startButton.removeAttribute("disabled");
+}
+
+function startTimer(startButton) {
+    //何秒のタイマーかを算出
+    var hourValue = parseInt(document.getElementById("hour_input").value);
+    var minuteValue= parseInt(document.getElementById("minute_input").value);
+    var secondVaule = parseInt(document.getElementById("second_input").value);
+    var settingSecond = (hourValue * 60 * 60) + (minuteValue * 60) + secondVaule;
+
+    //表示状態を変更
+    var startButton = document.getElementById("start_button");
+    var pauseButton = document.getElementById("pause_button");
+    var stopButton = document.getElementById("stop_button");
+    var input = document.getElementById("input");
+    var view = document.getElementById("view");
+    startButton.disabled = "disabled";
+    pauseButton.removeAttribute("disabled");
+    stopButton.removeAttribute("disabled");
+    input.style.display = "none";
+    view.style.display = "";
+    view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
+
+    //タイマースタート
+    var timerId = setInterval(function() {
+        settingSecond = settingSecond - 1;
+        var hourValue = parseInt(settingSecond / 60 / 60);
+        var minuteValue= parseInt(settingSecond / 60) % 60;
+        var secondVaule = settingSecond % 60;
+        view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
+
+        //タイマー終了！
+        if (settingSecond === 0) {
+            alert("時間です");
+            clearInterval(timerId);
+            
+            startButton.removeAttribute("disabled");
+            pauseButton.disabled = "disabled";
+            stopButton.disabled = "disabled";
+            input.style.display = "";
+            view.style.display = "none";
+        }
+    }, 1000);
+}
+
+    </script>
+</body>
+</html>
