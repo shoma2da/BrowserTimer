@@ -47,9 +47,9 @@
     <hr>
 
     <div id="input">
-        <input id="hour_input" type="number" max="99" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">時間
-        <input id="minute_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">分
-        <input id="second_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();">秒
+        <input id="hour_input" type="number" max="99" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();" onclick="changeStartButtonDisabled();">時間
+        <input id="minute_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();" onclick="changeStartButtonDisabled();">分
+        <input id="second_input" type="number" max="59" min="0" value="00" onkeyup="tidyNumber(this, this.value, this.max); changeStartButtonDisabled();" onclick="changeStartButtonDisabled();">秒
     </div>
     <div id="view">00:00:00</div>
     <div id="buttons">
