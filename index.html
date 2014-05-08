@@ -40,7 +40,7 @@
     <div id="view">00:00:00</div>
     <div id="buttons">
         <input id="start_button" type="button" value="カウントスタート" onclick="startTimer();">
-        <input id="pause_button" type="button" value="一時停止">
+        <input id="pause_button" type="button" value="一時停止" onclick="pauseTimer();">
         <input id="stop_button" type="button" value="停止" onclick="stopTimer();">
     </div>
 
@@ -79,12 +79,18 @@ function changeStartButtonDisabled() {
 }
 
 var timerId = 0;
-function startTimer(startButton) {
+var currentRemainTime = 0;
+function startTimer() {
     //何秒のタイマーかを算出
-    var hourValue = parseInt(document.getElementById("hour_input").value);
-    var minuteValue= parseInt(document.getElementById("minute_input").value);
-    var secondVaule = parseInt(document.getElementById("second_input").value);
-    var settingSecond = (hourValue * 60 * 60) + (minuteValue * 60) + secondVaule;
+    var hourValue = parseInt(currentRemainTime / 60 / 60);
+    var minuteValue= parseInt(currentRemainTime / 60) % 60;
+    var secondVaule = currentRemainTime % 60;
+    if (currentRemainTime === 0) { //フラグ管理！ほんとは引数で設定時間を決めれるようにした方が良さそう
+        var hourValue = parseInt(document.getElementById("hour_input").value);
+        var minuteValue= parseInt(document.getElementById("minute_input").value);
+        var secondVaule = parseInt(document.getElementById("second_input").value);
+        currentRemainTime = (hourValue * 60 * 60) + (minuteValue * 60) + secondVaule;
+    }
 
     //表示状態を変更
     var startButton = document.getElementById("start_button");
@@ -101,18 +107,28 @@ function startTimer(startButton) {
 
     //タイマースタート
     timerId = setInterval(function() {
-        settingSecond = settingSecond - 1;
-        var hourValue = parseInt(settingSecond / 60 / 60);
-        var minuteValue= parseInt(settingSecond / 60) % 60;
-        var secondVaule = settingSecond % 60;
+        currentRemainTime = currentRemainTime - 1;
+        var hourValue = parseInt(currentRemainTime / 60 / 60);
+        var minuteValue= parseInt(currentRemainTime / 60) % 60;
+        var secondVaule = currentRemainTime % 60;
         view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
 
         //タイマー終了！
-        if (settingSecond === 0) {
+        if (currentRemainTime === 0) {
             alert("時間です");
+            currentRemainTime = 0;
             stopTimer();
         }
     }, 1000);
+}
+
+function pauseTimer() {
+    clearInterval(timerId)
+
+    var startButton = document.getElementById("start_button");
+    var pauseButton = document.getElementById("pause_button");
+    startButton.removeAttribute("disabled");
+    pauseButton.disabled = "disabled";
 }
 
 function stopTimer() {
