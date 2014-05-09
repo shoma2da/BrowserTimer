@@ -175,12 +175,15 @@ function startTimer() {
         var minuteValue= parseInt(currentRemainTime / 60) % 60;
         var secondVaule = currentRemainTime % 60;
         view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
+        document.title = view.innerText + " - ブラウザタイマー";
 
         //タイマー終了！
         if (currentRemainTime === 0) {
             alert("時間です");
             currentRemainTime = 0;
             stopTimer();
+            document.title = "ブラウザタイマー 〜browser timer〜";
+
             ga('send', 'event', 'timer', 'finish');
         }
     }, 1000);
@@ -213,6 +216,8 @@ function stopTimer() {
     input.style.display = "";
     view.style.display = "none";
     currentRemainTime = 0;
+
+    document.title = "ブラウザタイマー 〜browser timer〜";
 
     ga('send', 'event', 'timer', 'stop');
 }
