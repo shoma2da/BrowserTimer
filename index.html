@@ -167,6 +167,7 @@ function startTimer() {
     input.style.display = "none";
     view.style.display = "";
     view.innerText = ('0' + hourValue).slice(-2) + ":" + ('0' + minuteValue).slice(-2) + ":" + ('0' + secondVaule).slice(-2);
+    document.title = view.innerText + " - ブラウザタイマー";
 
     //タイマースタート
     timerId = setInterval(function() {
